@@ -11,7 +11,13 @@ wss.on("connection", (socket) => {
   socket.on("message", (msg) => {
     console.log(`User Message Is  "${msg.toString()}"`);
 
-    // Send All Socket
+    // Send message to All Socket
     allSocket.forEach((s) => s.send(msg.toString()));
+  });
+
+  //When socket disconnect
+  socket.on("close", () => {
+    console.log(`${socket} is disconnect`);
+    allSocket = allSocket.filter((s) => s != socket);
   });
 });
