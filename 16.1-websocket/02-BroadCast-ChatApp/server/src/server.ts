@@ -30,6 +30,12 @@ app.post("/createGroup", async (req, res) => {
   const { groupId, groupName } = req.body;
   const groupExist = await Group.find({ groupId });
   if (groupExist) return res.json();
+
+  const group = await Group.create({
+    id: groupId,
+    name: groupName,
+  });
+  res.json({ data: group });
 });
 
 // wss.on("connection", (socket) => {
