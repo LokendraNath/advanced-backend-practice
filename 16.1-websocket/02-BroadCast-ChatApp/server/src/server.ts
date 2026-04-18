@@ -3,7 +3,8 @@ import express from "express";
 import cors from "cors";
 
 import mongoose from "mongoose";
-import { Group } from "./models/groupModel.js";
+//@ts-ignore
+import { Group } from "./models/groupModel";
 
 const app = express();
 const wss = new WebSocketServer({ port: 8080 });
@@ -31,13 +32,14 @@ mongoose
 
 app.post("/createGroup", async (req, res) => {
   const { groupId, groupName } = req.body;
-  const groupExist = await Group.find({ groupId });
-  if (groupExist) return res.json();
+  const groupExist = await Group.findOne({ id: groupId });
+  if (groupExist) return res.json({ message: "Group already exists" });
 
   const group = await Group.create({
     id: groupId,
     name: groupName,
   });
+  console.log(group);
   res.json({ data: group });
 });
 
