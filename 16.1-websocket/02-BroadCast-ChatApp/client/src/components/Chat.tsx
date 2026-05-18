@@ -1,11 +1,12 @@
-import { ArrowBigUpDash } from "lucide-react";
+import { ArrowBigUpDash, LucideStepBack } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ChatPage = () => {
   const [messages, setMessages] = useState(["Hello EveryOne", "Ya Hello"]);
   const [inputMessage, setInputMessage] = useState("");
   const wsRef = useRef();
+  const navigate = useNavigate();
   const { groupId } = useParams();
 
   useEffect(() => {
@@ -21,7 +22,7 @@ const ChatPage = () => {
         JSON.stringify({
           type: "join",
           payload: {
-            roomId: "69",
+            roomId: groupId,
           },
         }),
       );
@@ -30,7 +31,7 @@ const ChatPage = () => {
     return () => {
       ws.close();
     };
-  }, []);
+  }, [groupId]);
 
   function handleMessageSend() {
     const strData = JSON.stringify({
@@ -57,6 +58,9 @@ const ChatPage = () => {
         })}
       </div>
       <div className="absolute bottom-3 left-100 right-100 border-white bg-gray-800 py-2 px-4 rounded-2xl flex justify-between">
+        <button className="cursor-pointer" onClick={() => navigate("/")}>
+          <LucideStepBack />
+        </button>
         <input
           type="text"
           placeholder="Write Your Message"
